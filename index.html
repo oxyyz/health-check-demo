@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script src="https://cdn.tailwindcss.com"></script>
+		<title>Document</title>
+	</head>
+	<body>
+		<div class="w-full min-h-screen py-16 px-5">
+			<div class="container mx-auto">
+				<div id="tabs-container" class="flex flex-wrap gap-4 mb-8">
+					<!-- Dynamic categories will be inserted here -->
+				</div>
+
+				<!-- Card Container -->
+				<div
+					id="card-container"
+					class="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4 sm:grid-cols-[repeat(auto-fill,minmax(278px,1fr))] sm:gap-6"
+				></div>
+			</div>
+		</div>
+	</body>
+</html>
+
+<script>
+	const categories = [
+		{ label: 'All', value: 'all' },
+		{ label: 'Men Health', value: 'men-health' },
+		{ label: 'Women Health', value: 'women-health' },
+		{ label: 'Kidney', value: 'kidney' },
+		{ label: 'Liver', value: 'liver' },
+		{ label: 'Thyroid', value: 'thyroid' },
+	]
+
+	const cardData = [
+		{
+			title: 'Basic health check-up for men',
+			category: 'men-health',
+			basicPrice: '$ 1.599',
+			advancedPrice: '$ 3.499',
+			imageUrl: 'https://picsum.photos/278/190',
+		},
+		{
+			title: 'Complete health check-up for men',
+			category: 'men-health',
+			basicPrice: '$ 2.599',
+			advancedPrice: '$ 4.499',
+			imageUrl: 'https://picsum.photos/278/191',
+		},
+		{
+			title: 'Basic health check-up for women',
+			category: 'women-health',
+			basicPrice: '$ 1.299',
+			advancedPrice: '$ 2.999',
+			imageUrl: 'https://picsum.photos/278/192',
+		},
+		{
+			title: 'Complete health check-up for women',
+			category: 'women-health',
+			basicPrice: '$ 1.199',
+			advancedPrice: '$ 2.599',
+			imageUrl: 'https://picsum.photos/278/193',
+		},
+		{
+			title: 'Thyroid Profile',
+			category: 'thyroid',
+			basicPrice: '$ 1.999',
+			advancedPrice: '$ 3.999',
+			imageUrl: 'https://picsum.photos/278/194',
+		},
+		{
+			title: 'Liver Profile',
+			category: 'liver',
+			basicPrice: '$ 1.999',
+			advancedPrice: '$ 3.999',
+			imageUrl: 'https://picsum.photos/278/195',
+		},
+		{
+			title: 'Fatty liver screening',
+			category: 'liver',
+			basicPrice: '$ 1.999',
+			advancedPrice: '$ 3.999',
+			imageUrl: 'https://picsum.photos/278/196',
+		},
+		{
+			title: 'Kidney profile',
+			category: 'kidney',
+			basicPrice: '$ 1.999',
+			advancedPrice: '$ 3.999',
+			imageUrl: 'https://picsum.photos/278/196',
+		},
+	]
+
+	let activeCategory = 'all'
+
+	function renderTabs(categories) {
+		const tabsContainer = document.getElementById('tabs-container')
+		tabsContainer.innerHTML = '' // Clear the container
+
+		categories.forEach(category => {
+			const isActive =
+				category.value === activeCategory
+					? 'bg-[#1576B5] text-white'
+					: 'bg-[#1576B5]/20  text-black'
+			const tabElement = `
+            <button onclick="filterCards('${category.value}')"
+              class="w-fit py-2 px-4 rounded-full text-sm font-medium ${isActive} hover:bg-[#1576B5]/80 hover:text-white focus:outline-none transition-colors duration-200 ease-in-out"
+            >
+              ${category.label}
+            </button>
+          `
+			tabsContainer.innerHTML += tabElement
+		})
+	}
+
+	function renderCards(cards) {
+		const container = document.getElementById('card-container')
+		container.innerHTML = ''
+
+		cards.forEach(card => {
+			const cardElement = `
+			<div
+						class="w-full h-[340px] rounded-[20px] bg-white shadow-lg overflow-hidden transation-all duration-200 ease-in-out hover:shadow-xl"
+					>
+						<div class="w-full h-[190px]">
+							<img
+								src="${card.imageUrl}"
+								alt="card-photo"
+								class="w-full h-full object-cover"
+							/>
+						</div>
+						<div class="h-[150px] p-4 flex flex-col gap-2 items-center justify-between">
+							<p class="text-[#1576B5] text-xl text-center">${card.title}</p>
+							<div class="w-full  flex items-center justify-center gap-2">
+								<a
+									href="https://t.me/tashclinic_bot"
+									target="_blank"
+									class="w-full py-2 px-5 rounded-xl bg-[#1576B5]/20 transition-all duration-200 ease-in-out hover:bg-[#1576B5]/30 text-sm text-center"
+									>Details</a
+								>
+								<a
+									href="https://t.me/tashclinic_bot"
+									target="_blank"
+									class="w-full py-2 px-5 rounded-xl bg-[#1576B5] transition-all duration-200 ease-in-out hover:bg-[#1576B5]/80 text-sm text-white text-center"
+									>Book Now</a
+								>
+							</div>
+						</div>
+					</div>
+			`
+			container.innerHTML += cardElement
+		})
+	}
+
+	function filterCards(categoryValue) {
+		activeCategory = categoryValue // Update active category
+		let filteredCards
+		if (categoryValue === 'all') {
+			filteredCards = cardData
+		} else {
+			filteredCards = cardData.filter(card => card.category === categoryValue)
+		}
+		renderCards(filteredCards)
+		renderTabs(categories) // Re-render tabs to update the active state
+	}
+
+	renderTabs(categories)
+	renderCards(cardData)
+</script>
